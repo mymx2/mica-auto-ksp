@@ -66,7 +66,7 @@ dependencies {
 
 - Google Auto: https://github.com/google/auto
 - Spring 5 - spring-context-indexer: https://github.com/spring-projects/spring-framework/tree/master/spring-context-indexer
-- Auto-configuration: https://docs.spring.io/spring-boot/4.0-SNAPSHOT/reference/features/developing-auto-configuration.html
+- Auto-configuration: https://docs.spring.io/spring-boot/reference/features/developing-auto-configuration.html
 
 ## 更多资讯
 
