@@ -1,3 +1,6 @@
+@file:Suppress("UnstableApiUsage")
+
+import com.autonomousapps.tasks.ProjectHealthTask
 import io.github.mymx2.plugin.dyCreateVersionCatalogs
 import io.github.mymx2.plugin.dyIncludeProjects
 
@@ -9,20 +12,17 @@ plugins {
   id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 
-rootProject.name = rootDir.name
+rootProject.name = "auto-ksp"
 
-dyCreateVersionCatalogs(
-  mapOf(
-    //    "bomLibs" to "gradle/bomLibs.versions.toml",
-  )
-)
+dyCreateVersionCatalogs(mapOf("depLibs" to "gradle/depLibs.versions.toml"))
 
 dyIncludeProjects(
   mapOf(
-    ":docs" to "docs",
-    ":app" to "app",
-    ":example-java" to "examples/example-java",
-    ":example-kotlin" to "examples/example-kotlin",
-    ":example-spring" to "examples/example-spring",
+    ":mica-auto-ksp" to "libraries/mica-auto-ksp",
+    ":mica-auto-ksp-test" to "libraries/mica-auto-ksp-test",
   )
 )
+
+gradle.lifecycle.afterProject {
+  tasks.withType<ProjectHealthTask>().configureEach { enabled = false }
+}

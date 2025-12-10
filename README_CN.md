@@ -45,11 +45,11 @@
     src="https://img.shields.io/maven-central/v/io.github.mymx2/mica-auto-ksp?strategy=latestProperty"/></a>
 </p>
 
-English | [中文](README_CN.md)
+[English](README.md) | 中文
 
-A [ksp](https://github.com/google/ksp) implementation of [mica-auto](https://github.com/lets-mica/mica-auto).
+[mica-auto](https://github.com/lets-mica/mica-auto) 的 [ksp](https://github.com/google/ksp) 实现。
 
-## Usage
+## 使用方法
 
 ```gradle
 plugins {
@@ -62,12 +62,12 @@ dependencies {
 }
 ```
 
-## References
+## 相关链接
 
 - Google Auto: https://github.com/google/auto
 - Spring 5 - spring-context-indexer: https://github.com/spring-projects/spring-framework/tree/master/spring-context-indexer
 - Auto-configuration: https://docs.spring.io/spring-boot/4.0-SNAPSHOT/reference/features/developing-auto-configuration.html
 
-## For More Information
+## 更多资讯
 
 ![dreamlu](https://raw.githubusercontent.com/lets-mica/mica-auto/master/docs/dreamlu-weixin.jpg)
