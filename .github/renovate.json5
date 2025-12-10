@@ -1,0 +1,64 @@
+{
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  extends: [
+    "config:best-practices",
+    ":semanticCommitTypeAll(deps)",
+    ":semanticCommitScopeDisabled",
+  ],
+  semanticCommitType: "deps",
+  semanticCommitScope: "",
+  labels: ["type|dependency-upgrade", "pr|deps"],
+  ignorePaths: ["**/__tests__/**"],
+  pinDigests: true,
+  ignoreUnstable: false,
+  minimumReleaseAge: "7 days",
+  dependencyDashboard: true,
+  packageRules: [
+    {
+      matchFileNames: ["**/rcLibs.versions.toml"],
+      allowedVersions: "!/(-M|-m|-beta|-Beta|-BETA|-alpha|-Alpha|-ALPHA|-snapshot|-Snapshot|-SNAPSHOT)/",
+    },
+    {
+      matchFileNames: ["**/betaLibs.versions.toml"],
+      allowedVersions: "!/(-alpha|-Alpha|-ALPHA|-snapshot|-Snapshot|-SNAPSHOT)/",
+    },
+    {
+      matchFileNames: ["**/alphaLibs.versions.toml"],
+      allowedVersions: "!/(-snapshot|-Snapshot|-SNAPSHOT)/",
+    },
+  ],
+  customManagers: [
+    {
+      customType: "regex",
+      managerFilePatterns: ["\\.versions.toml$"],
+      matchStrings: ['(^|\n)(?<depName>gradle) *= *"(?<currentValue>.*)"'],
+      depNameTemplate: "gradle",
+      datasourceTemplate: "gradle-version",
+    },
+    {
+      customType: "regex",
+      managerFilePatterns: ["\\.versions.toml$"],
+      matchStrings: ['(^|\n)(?<depName>node) *= *"(?<currentValue>.*)"'],
+      depNameTemplate: "node",
+      datasourceTemplate: "node-version",
+    },
+    {
+      customType: "regex",
+      managerFilePatterns: ["gradle/**/InternalDependencies\\.kt"],
+      matchStrings: [
+        '(?<enumName>[a-zA-Z0-9_]+)\\s*=\\s*\\{[^}]*module\\s*=\\s*\"(?<depName>[^\"]+)\"[^}]*version\\s*=\\s*\"(?<currentValue>[^\"]+)\"[^}]*type\\s*=\\s*\"maven\"[^}]*\\}',
+      ],
+      depNameTemplate: "{{{depName}}}",
+      datasourceTemplate: "maven",
+    },
+    {
+      customType: "regex",
+      managerFilePatterns: ["gradle/**/InternalDependencies\\.kt"],
+      matchStrings: [
+        '(?<enumName>[a-zA-Z0-9_]+)\\s*=\\s*\\{[^}]*module\\s*=\\s*\"(?<depName>[^\"]+)\"[^}]*version\\s*=\\s*\"(?<currentValue>[^\"]+)\"[^}]*type\\s*=\\s*\"npm\"[^}]*\\}',
+      ],
+      depNameTemplate: "{{{depName}}}",
+      datasourceTemplate: "npm",
+    },
+  ],
+}
