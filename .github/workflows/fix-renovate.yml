@@ -96,14 +96,17 @@ jobs:
         run: ./gradlew --version
 
       - name: 🔏 Write locks (only for bots)
-        run: ./gradlew :build-logic:writeLocks writeLocks --no-parallel --no-configuration-cache
+        run: ./gradlew :build-logic:writeLocks writeLocks
 
       - name: 📝 Get Commit Message
         run: |
           COMMIT_MSG=$(git log --format=%s -n 1)
           echo "COMMIT_MSG=${COMMIT_MSG}" >> $GITHUB_ENV
 
-      - name: 💾 Commit file changes (only for bots)
+      # =======================
+      # Commit file changes (only for bots)
+      # =======================
+      - name: 💾 Commit file changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
