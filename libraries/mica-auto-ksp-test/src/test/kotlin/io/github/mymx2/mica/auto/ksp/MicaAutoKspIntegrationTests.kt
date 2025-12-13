@@ -5,7 +5,7 @@ import auto.ksp.test.TestAutoConfiguration
 import auto.ksp.test.TestComponent
 import io.github.mymx2.mica.auto.skp.MicaAutoKspTest
 import java.nio.file.Files
-import java.nio.file.Paths
+import java.nio.file.Path
 import java.util.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
@@ -57,8 +57,7 @@ class MicaAutoKspIntegrationTests(private val context: ApplicationContext) {
   @Test
   @DisplayName("检查 META-INF/services 文件内容")
   fun checkMetaInfServicesContent() {
-    val serviceFile =
-      Paths.get(generatedResourcesDir, "META-INF/services/auto.ksp.test.HelloService")
+    val serviceFile = Path.of(generatedResourcesDir, "META-INF/services/auto.ksp.test.HelloService")
     assertThat(Files.exists(serviceFile)).isTrue()
 
     val lines = Files.readAllLines(serviceFile)
@@ -69,7 +68,7 @@ class MicaAutoKspIntegrationTests(private val context: ApplicationContext) {
   @DisplayName("检查 Spring AutoConfiguration.imports 文件内容")
   fun checkSpringAutoConfigurationImportsContent() {
     val autoConfigFile =
-      Paths.get(
+      Path.of(
         generatedResourcesDir,
         "META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports",
       )
@@ -87,7 +86,7 @@ class MicaAutoKspIntegrationTests(private val context: ApplicationContext) {
   @Test
   @DisplayName("检查 Spring.factories 文件内容")
   fun checkSpringFactoriesContent() {
-    val factoriesFile = Paths.get(generatedResourcesDir, "META-INF/spring.factories")
+    val factoriesFile = Path.of(generatedResourcesDir, "META-INF/spring.factories")
     assertThat(Files.exists(factoriesFile)).isTrue()
 
     val content = Files.readString(factoriesFile)
