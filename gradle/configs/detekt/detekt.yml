@@ -25,7 +25,7 @@ style:
   MagicNumber:
     active: false
   ForbiddenImport:
-    active: false
+    active: true
     imports:
       - reason: "Use LocalDateTime instead"
         value: "java.util.Date"
@@ -35,6 +35,6 @@ style:
     active: true
     methods:
       - reason: "Use LocalDateTime instead"
-        value: "java.util.Date"
+        value: "java.util.Date.<init>"
       - reason: "Use Path instead"
-        value: "java.nio.file.Paths"
+        value: "java.nio.file.Paths.get"

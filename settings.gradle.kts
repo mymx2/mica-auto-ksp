@@ -1,6 +1,3 @@
-@file:Suppress("UnstableApiUsage")
-
-import com.autonomousapps.tasks.ProjectHealthTask
 import io.github.mymx2.plugin.dyCreateVersionCatalogs
 import io.github.mymx2.plugin.dyIncludeProjects
 
@@ -22,7 +19,3 @@ dyIncludeProjects(
     ":mica-auto-ksp-test" to "libraries/mica-auto-ksp-test",
   )
 )
-
-gradle.lifecycle.afterProject {
-  tasks.withType<ProjectHealthTask>().configureEach { enabled = false }
-}
