@@ -89,12 +89,6 @@ jobs:
       - name: 🏗 Run main checks
         run: ./gradlew check
 
-      #      - name: 🧪 End-to-End tests
-      #        run: ./gradlew testEndToEnd
-      #
-      #      - name: 🐢 Slow end-to-end tests
-      #        run: ./gradlew testEndToEndSlow
-
       - name: 🛠 Generate CycloneDX BOM
         if: github.event_name != 'pull_request'
         run: ./gradlew cyclonedxBom --no-configuration-cache
@@ -105,7 +99,7 @@ jobs:
 
       - name: 📤 Upload coverage to Codecov
         if: github.event_name != 'pull_request'
-        uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5.5.1
+        uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
         with:
           fail_ci_if_error: true
           verbose: true

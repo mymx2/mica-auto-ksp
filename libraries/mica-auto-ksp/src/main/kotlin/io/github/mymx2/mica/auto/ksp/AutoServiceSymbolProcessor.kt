@@ -20,9 +20,24 @@ import com.squareup.kotlinpoet.ClassName
 import java.io.IOException
 import java.util.*
 
+/**
+ * [AutoService] 的 KSP 实现：
+ *
+ * from: https://github.com/ZacSweers/auto-service-ksp
+ *
+ * ```
+ * 目标：
+ * - 扫描所有 @AutoService(value = ...) 标注的类
+ * - 校验实现类是否 implements 接口
+ * - 将结果映射为： META-INF/services/<interface binary name>
+ * ```
+ *
+ * 行为基本对齐 javac annotation processor 版本的 auto-service
+ */
 class AutoServiceSymbolProcessor(environment: SymbolProcessorEnvironment) : SymbolProcessor {
 
   private companion object {
+    /** AutoService 注解的全限定名 */
     const val AUTO_SERVICE_NAME = "com.google.auto.service.AutoService"
   }
 
@@ -30,35 +45,53 @@ class AutoServiceSymbolProcessor(environment: SymbolProcessorEnvironment) : Symb
   private val logger = environment.logger
 
   /**
-   * Maps the class names of service provider interfaces to the class names of the concrete classes
-   * which implement them plus their KSFile (for incremental processing).
+   * providers 的核心作用：
    *
-   * For example,
    * ```
-   * "com.google.abc.LocalRpcService" -> "com.google.abc.datastore.LocalDatastoreService"
+   * Key   : Service Interface 的 binary name
+   * Value : (实现类的 binary name, 对应的 KSFile)
+   *
+   * 示例：
+   *   com.foo.Service
+   *     -> (com.foo.impl.ServiceImpl, ServiceImpl.kt)
+   *
+   * 为什么需要 KSFile：
+   * - 用于 KSP 增量编译的 Dependencies
    * ```
    */
   private val providers: Multimap<String, Pair<String, KSFile>> = HashMultimap.create()
 
+  /** 是否开启严格校验（实现类必须 implements 接口） */
   private val verify = environment.options["autoserviceKsp.verify"]?.toBoolean() == true
+
+  /** 是否输出详细日志 */
   private val verbose = environment.options["autoserviceKsp.verbose"]?.toBoolean() == true
 
   /**
-   * - For each class annotated with [AutoService
-   *     - Verify the [AutoService] interface value is correct
-   *     - Categorize the class by its service interface
-   * - For each [AutoService] interface
-   *     - Create a file named `META-INF/services/<interface>`
-   *     - For each [AutoService] annotated class for this interface
-   *         - Create an entry in the file
+   * KSP 主处理入口
+   *
+   * 整体流程：
+   *
+   * ```
+   * 1. 查找 [AutoService] 注解类型
+   * 2. 扫描所有被 @AutoService 标注的类
+   *    - 解析 annotation value（可能是单个或多个接口）
+   *    - 校验实现关系
+   *    - 按 Service Interface 分类收集
+   * 3. 为每个 Service Interface 生成 META-INF/services 文件
+   * 4. 返回 deferred symbols（用于下一轮处理）
+   * ```
    */
   @Suppress("detekt:CyclomaticComplexMethod", "detekt:LongMethod")
   override fun process(resolver: Resolver): List<KSAnnotated> {
+
+    // 1️⃣ 获取 AutoService 注解类型本身
     val autoServiceType =
       resolver
         .getClassDeclarationByName(resolver.getKSNameFromString(AUTO_SERVICE_NAME))
         ?.asType(emptyList())
         ?: run {
+          // 如果 classpath 中根本没有 AutoService，直接跳过
           val message = "@AutoService type not found on the classpath, skipping processing."
           if (verbose) {
             logger.warn(message)
@@ -68,10 +101,15 @@ class AutoServiceSymbolProcessor(environment: SymbolProcessorEnvironment) : Symb
           return emptyList()
         }
 
+    // deferred：用于类型尚未解析完成（isError）的情况
     val deferred = mutableListOf<KSAnnotated>()
 
+    // 2️⃣ 查找所有使用了 @AutoService 的符号
     val symbolsWithAnnotation = resolver.getSymbolsWithAnnotation(AUTO_SERVICE_NAME).toList()
+
     symbolsWithAnnotation.filterIsInstance<KSClassDeclaration>().forEach { providerImplementer ->
+
+      // 找到该类上的 @AutoService 注解实例
       val annotation =
         providerImplementer.annotations.find { it.annotationType.resolve() == autoServiceType }
           ?: run {
@@ -79,8 +117,20 @@ class AutoServiceSymbolProcessor(environment: SymbolProcessorEnvironment) : Symb
             return@forEach
           }
 
+      // 读取 @AutoService(value = [...]) 的 value 参数
       val argumentValue = annotation.arguments.find { it.name?.getShortName() == "value" }!!.value
 
+      /**
+       * ```
+       * AutoService 支持：
+       *   @AutoService(Foo::class)
+       *   @AutoService(Foo::class, Bar::class)
+       *
+       * KSP 里可能是：
+       * - KSType
+       * - List<KSType>
+       * ```
+       */
       @Suppress("UNCHECKED_CAST")
       val providerInterfaces =
         try {
@@ -91,22 +141,29 @@ class AutoServiceSymbolProcessor(environment: SymbolProcessorEnvironment) : Symb
         }
 
       if (providerInterfaces.isEmpty()) {
-        val message =
+        logger.error(
           """
           No service interfaces specified by @AutoService annotation!
-          You can provide them in annotation parameters: @AutoService(YourService::class)
+          You can provide them in annotation parameters:
+          @AutoService(YourService::class)
           """
-            .trimIndent()
-
-        logger.error(message, annotation)
+            .trimIndent(),
+          annotation,
+        )
       }
 
+      // 3️⃣ 针对每个声明的 Service Interface 进行处理
       for (providerType in providerInterfaces) {
+
+        // 类型尚未解析完成（例如跨模块）
         if (providerType.isError) {
           deferred += providerImplementer
           return@forEach
         }
+
         val providerDecl = providerType.declaration.closestClassDeclaration()!!
+
+        // 校验实现关系
         when (checkImplementer(providerImplementer, providerType)) {
           ValidationResult.VALID -> {
             providers.put(
@@ -114,56 +171,86 @@ class AutoServiceSymbolProcessor(environment: SymbolProcessorEnvironment) : Symb
               providerImplementer.toBinaryName() to providerImplementer.containingFile!!,
             )
           }
+
           ValidationResult.INVALID -> {
-            val message =
+            logger.error(
               "ServiceProviders must implement their service provider interface. " +
-                providerImplementer.qualifiedName +
-                " does not implement " +
-                providerDecl.qualifiedName
-            logger.error(message, providerImplementer)
+                "${providerImplementer.qualifiedName} does not implement " +
+                providerDecl.qualifiedName,
+              providerImplementer,
+            )
           }
+
           ValidationResult.DEFERRED -> {
             deferred += providerImplementer
           }
         }
       }
     }
+
+    // 4️⃣ 生成 META-INF/services 文件
     generateAndClearConfigFiles()
+
+    // 返回需要下一轮处理的符号
     return deferred
   }
 
+  /**
+   * 校验 providerImplementer 是否真正实现了 providerType
+   *
+   * 返回值：
+   * - VALID : 校验通过
+   * - INVALID : 未实现接口
+   * - DEFERRED : 依赖类型尚未解析完成
+   */
   @Suppress("detekt:ReturnCount")
   private fun checkImplementer(
     providerImplementer: KSClassDeclaration,
     providerType: KSType,
   ): ValidationResult {
+
+    // 未开启 verify 时直接放行
     if (!verify) {
       return ValidationResult.VALID
     }
+
+    // 遍历所有父类型（包含接口、父类）
     for (superType in providerImplementer.getAllSuperTypes()) {
-      if (superType.isAssignableFrom(providerType)) {
-        return ValidationResult.VALID
-      } else if (superType.isError) {
-        return ValidationResult.DEFERRED
+      when {
+        superType.isAssignableFrom(providerType) -> return ValidationResult.VALID
+
+        superType.isError -> return ValidationResult.DEFERRED
       }
     }
+
     return ValidationResult.INVALID
   }
 
+  /** 根据 providers 内容生成 META-INF/services 文件 */
   @Suppress("detekt:SpreadOperator", "detekt:NestedBlockDepth")
   private fun generateAndClearConfigFiles() {
+
     for (providerInterface in providers.keySet()) {
       val resourceFile = "META-INF/services/$providerInterface"
       log("Working on resource file: $resourceFile")
+
       try {
+        // TreeSet 保证稳定、有序输出
         val allServices: SortedSet<String> = Sets.newTreeSet()
+
         val foundImplementers = providers[providerInterface]
-        val newServices: Set<String> = HashSet(foundImplementers.map { it.first })
+        val newServices = foundImplementers.map { it.first }.toSet()
+
         allServices.addAll(newServices)
+
         log("New service file contents: $allServices")
+
+        // 收集来源文件，用于增量编译
         val ksFiles = foundImplementers.map { it.second }
-        log("Originating files: ${ksFiles.map(KSFile::fileName)}")
+
         val dependencies = Dependencies(true, *ksFiles.toTypedArray())
+
+        // 创建 META-INF/services 文件
         codeGenerator.createNewFile(dependencies, "", resourceFile, "").bufferedWriter().use {
           writer ->
           for (service in allServices) {
@@ -171,11 +258,14 @@ class AutoServiceSymbolProcessor(environment: SymbolProcessorEnvironment) : Symb
             writer.newLine()
           }
         }
+
         log("Wrote to: $resourceFile")
       } catch (e: IOException) {
         logger.error("Unable to create $resourceFile, $e")
       }
     }
+
+    // 清空，避免下轮重复生成
     providers.clear()
   }
 
@@ -186,16 +276,21 @@ class AutoServiceSymbolProcessor(environment: SymbolProcessorEnvironment) : Symb
   }
 
   /**
-   * Returns the binary name of a reference type. For example, {@code com.google.Foo$Bar}, instead
-   * of {@code com.google.Foo.Bar}.
+   * 将类声明转换为 binary name
+   *
+   * ```
+   * 例如：
+   *   com.foo.Outer.Inner
+   * → com.foo.Outer$Inner
+   * ```
    */
-  private fun KSClassDeclaration.toBinaryName(): String {
-    return toClassName().reflectionName()
-  }
+  private fun KSClassDeclaration.toBinaryName(): String = toClassName().reflectionName()
 
+  /** 将 KSClassDeclaration 转换为 KotlinPoet 的 ClassName */
   @Suppress("detekt:SpreadOperator")
   private fun KSClassDeclaration.toClassName(): ClassName {
     require(!isLocal()) { "Local/anonymous classes are not supported!" }
+
     val pkgName = packageName.asString()
     val typesString = qualifiedName!!.asString().removePrefix("$pkgName.")
 
@@ -210,7 +305,9 @@ class AutoServiceSymbolProcessor(environment: SymbolProcessorEnvironment) : Symb
   }
 }
 
+/** KSP SPI Provider */
 class AutoServiceSymbolProcessorProvider : SymbolProcessorProvider {
+
   override fun create(environment: SymbolProcessorEnvironment): SymbolProcessor =
     AutoServiceSymbolProcessor(environment)
 }

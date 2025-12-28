@@ -1,8 +1,10 @@
 package io.github.mymx2.mica.auto.ksp
 
+import auto.ksp.test.AutoConfigurationSuccess1
+import auto.ksp.test.AutoConfigurationSuccess2
 import auto.ksp.test.HelloService
-import auto.ksp.test.TestAutoConfiguration
-import auto.ksp.test.TestComponent
+import auto.ksp.test.HelloServiceImpl
+import auto.ksp.test.IgnoredAutoConfiguration
 import io.github.mymx2.mica.auto.skp.MicaAutoKspTest
 import java.nio.file.Files
 import java.nio.file.Path
@@ -12,6 +14,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.getBean
+import org.springframework.beans.factory.getBeanProvider
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.system.CapturedOutput
 import org.springframework.boot.test.system.OutputCaptureExtension
@@ -36,9 +39,9 @@ class MicaAutoKspIntegrationTests(private val context: ApplicationContext) {
   @Test
   @DisplayName("检查 AutoConfiguration Beans 是否加载")
   fun checkAutoConfigurationBeansLoaded() {
-    assertThat(context.getBean<TestAutoConfiguration>()).isNotNull
-    assertThat(context.getBean<TestComponent>()).isNotNull
-    assertThat(context.getBean<MicaAutoKspTest>()).isNotNull
+    assertThat(context.getBean<AutoConfigurationSuccess1>()).isNotNull
+    assertThat(context.getBean<AutoConfigurationSuccess2>()).isNotNull
+    assertThat(context.getBeanProvider<IgnoredAutoConfiguration>().ifAvailable).isNull()
   }
 
   @Test
@@ -49,7 +52,8 @@ class MicaAutoKspIntegrationTests(private val context: ApplicationContext) {
 
     assertThat(services).isNotEmpty
 
-    val impl = services.firstOrNull { it.javaClass.simpleName == "HelloServiceImpl" }
+    val impl =
+      services.firstOrNull { it.javaClass.simpleName == HelloServiceImpl::class.simpleName }
     assertThat(impl).isNotNull
     assertThat(impl!!.hello()).isEqualTo("OK")
   }
@@ -77,9 +81,8 @@ class MicaAutoKspIntegrationTests(private val context: ApplicationContext) {
     val lines = Files.readAllLines(autoConfigFile)
     assertThat(lines)
       .contains(
-        "auto.ksp.test.TestAutoConfiguration",
-        "auto.ksp.test.TestComponent",
-        "io.github.mymx2.mica.auto.skp.MicaAutoKspTest",
+        "auto.ksp.test.AutoConfigurationSuccess1",
+        "auto.ksp.test.AutoConfigurationSuccess2",
       )
   }
 
@@ -92,10 +95,12 @@ class MicaAutoKspIntegrationTests(private val context: ApplicationContext) {
     val content = Files.readString(factoriesFile)
     assertThat(content)
       .contains(
-        "org.springframework.boot.autoconfigure.EnableAutoConfiguration=\\",
-        "io.github.mymx2.mica.auto.skp.MicaAutoKspTest,\\",
-        "auto.ksp.test.TestAutoConfiguration,\\",
-        "auto.ksp.test.TestComponent",
+        """
+        org.springframework.context.ApplicationListener=\
+          auto.ksp.test.AutoListenerSuccess1,\
+          auto.ksp.test.AutoListenerSuccess2
+        """
+          .trimIndent()
       )
   }
 }

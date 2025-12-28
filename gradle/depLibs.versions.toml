@@ -5,7 +5,7 @@ latest = "latest.release"
 
 [libraries]
 kotlinpoet = { module = "com.squareup:kotlinpoet", version = "2.2.0" }
-symbolProcessingApi = { module = "com.google.devtools.ksp:symbol-processing-api", version = "2.3.3" }
+symbolProcessingApi = { module = "com.google.devtools.ksp:symbol-processing-api", version = "2.3.4" }
 autoService = { module = "com.google.auto.service:auto-service", version = "1.1.1" }
 micaAuto = { module = "net.dreamlu:mica-auto", version = "4.0.1" }
 
