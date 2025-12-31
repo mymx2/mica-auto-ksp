@@ -2,6 +2,7 @@
 
 package auto.ksp.test
 
+import io.github.mymx2.mica.auto.ksp.AutoFactory
 import net.dreamlu.mica.auto.annotation.AutoIgnore
 import net.dreamlu.mica.auto.annotation.AutoListener
 import org.springframework.boot.autoconfigure.AutoConfiguration
@@ -36,7 +37,7 @@ class AutoListenerSuccess1 : ApplicationListener<ApplicationStartedEvent> {
 }
 
 /** 正常的 ApplicationListener */
-@AutoListener
+@AutoFactory(ApplicationListener::class)
 class AutoListenerSuccess2 : ApplicationListener<ApplicationReadyEvent> {
   override fun onApplicationEvent(event: ApplicationReadyEvent) {
     println("ApplicationListener#2#${event::class.java.simpleName}")

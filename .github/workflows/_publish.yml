@@ -87,11 +87,13 @@ jobs:
       - name: 📄 Summary Changelog
         if: ${{ steps.changelog.outputs.changelog }}
         run: |
-          echo "<details>" >> $GITHUB_STEP_SUMMARY
-          echo "<summary>📜 Release Changelog</summary>" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          cat <<< "${{ steps.changelog.outputs.changelog }}" >> $GITHUB_STEP_SUMMARY
-          echo "</details>" >> $GITHUB_STEP_SUMMARY
+          {
+            echo "<details>"
+            echo "<summary>📜 Release Changelog</summary>"
+            echo
+            printf "%s\n" "${{ steps.changelog.outputs.changelog }}"
+            echo "</details>"
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: 🚀 Create GitHub Release
         if: ${{ inputs.release }}

@@ -13,6 +13,7 @@ import com.google.devtools.ksp.symbol.ClassKind
 import com.google.devtools.ksp.symbol.KSAnnotated
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSFile
+import com.google.devtools.ksp.symbol.KSType
 import java.io.IOException
 import net.dreamlu.mica.auto.annotation.AutoIgnore
 import net.dreamlu.mica.auto.common.BootAutoType
@@ -37,6 +38,14 @@ class AutoConfigurationSymbolProcessorProcessor(environment: SymbolProcessorEnvi
 
   /** The location to look for factories. */
   private val FACTORIES_RESOURCE_LOCATION = "META-INF/spring.factories"
+
+  /** AutoFactory imports */
+  private val AUTO_FACTORY =
+    Triple(
+      FACTORIES_RESOURCE_LOCATION,
+      AutoFactory::class.qualifiedName!!,
+      BootAutoType.COMPONENT.annotation,
+    )
 
   /** Mica Feign */
   private val AUTO_FEIGN =
@@ -67,10 +76,12 @@ class AutoConfigurationSymbolProcessorProcessor(environment: SymbolProcessorEnvi
     return deferred
   }
 
+  @Suppress("detekt:CyclomaticComplexMethod", "detekt:LongMethod")
   private fun processAnnotations(resolver: Resolver): List<KSAnnotated> {
     BootAutoType.entries
       .map { Triple(FACTORIES_RESOURCE_LOCATION, it.annotation, it.configureKey) }
       .plus(AUTO_CONFIGURATION)
+      .plus(AUTO_FACTORY)
       .plus(AUTO_FEIGN)
       .forEach { autoType ->
         val (resourceFile, annotationName, providerInterface) = autoType
@@ -92,17 +103,71 @@ class AutoConfigurationSymbolProcessorProcessor(environment: SymbolProcessorEnvi
             val service =
               providerImplementer.qualifiedName.run { this?.asString() ?: return@forEach }
 
-            if (
-              annotationName == AUTO_FEIGN.second &&
-                providerImplementer.classKind != ClassKind.INTERFACE
-            ) {
-              log("@FeignClient annotation can only be applied to interfaces.")
-              return@forEach
+            if (annotationName == AUTO_FACTORY.second) {
+              if (providerImplementer.classKind == ClassKind.INTERFACE) {
+                logger.error("@AutoFactory annotation can only be applied to classes.")
+                return@forEach
+              }
+              // 找到该类上的 @AutoFactory 注解实例
+              val annotation =
+                annotations.find {
+                  val annotationName =
+                    it.annotationType.resolve().declaration.qualifiedName?.asString()
+                  annotationName == AUTO_FACTORY.second
+                }
+                  ?: run {
+                    logger.error("@AutoFactory annotation not found", providerImplementer)
+                    return@forEach
+                  }
+              // 读取 @AutoFactory(value = [...]) 的 value 参数
+              val argumentValue =
+                annotation.arguments.find { it.name?.getShortName() == "value" }!!.value
+              @Suppress("UNCHECKED_CAST")
+              val providerInterfaces =
+                try {
+                  argumentValue as? List<KSType> ?: listOf(argumentValue as KSType)
+                } catch (_: ClassCastException) {
+                  logger.error("No 'value' member value found!", annotation)
+                  return@forEach
+                }
+
+              if (providerInterfaces.isEmpty()) {
+                logger.error(
+                  """
+                  No service interfaces specified by @AutoFactory annotation!
+                  You can provide them in annotation parameters:
+                  @AutoFactory(YourService::class)
+                  """
+                    .trimIndent(),
+                  annotation,
+                )
+              }
+              providerInterfaces.forEach {
+                val providerInterface =
+                  it.declaration.qualifiedName?.asString()
+                    ?: run {
+                      logger.error("Provider interface not found", providerImplementer)
+                      return@forEach
+                    }
+                providers.put(
+                  resourceFile,
+                  Triple(providerInterface, service, providerImplementer.containingFile!!),
+                )
+              }
+            } else {
+              if (
+                annotationName == AUTO_FEIGN.second &&
+                  providerImplementer.classKind != ClassKind.INTERFACE
+              ) {
+                log("@FeignClient annotation can only be applied to interfaces.")
+                return@forEach
+              }
+
+              providers.put(
+                resourceFile,
+                Triple(providerInterface, service, providerImplementer.containingFile!!),
+              )
             }
-            providers.put(
-              resourceFile,
-              Triple(providerInterface, service, providerImplementer.containingFile!!),
-            )
           }
       }
 
