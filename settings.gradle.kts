@@ -1,11 +1,9 @@
 import io.github.mymx2.plugin.dyCreateVersionCatalogs
 import io.github.mymx2.plugin.dyIncludeProjects
 
-pluginManagement { includeBuild("gradle/build-logic") }
-
 plugins {
-  id("io.github.mymx2.build")
-  id("io.github.mymx2.plugin.dy.example.settings")
+  id("io.github.mymx2.build") version "1.3.0"
+  id("io.github.mymx2.plugin.dy.example.settings") version "1.3.0"
   id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 
