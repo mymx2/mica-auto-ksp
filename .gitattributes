@@ -4,8 +4,8 @@
 
 # Override Linguist
 # *.* linguist-language=Kotlin
-.github/* linguist-vendored
-gradle/configs/* linguist-vendored
+.github/** linguist-vendored
+gradle/configs/** linguist-vendored
 
 # Automatically normalize line endings (to LF) for all text-based files.
 * text=auto eol=lf
