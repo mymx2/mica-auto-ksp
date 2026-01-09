@@ -6,6 +6,7 @@ plugins {
 dependencies {
   ksp(projects.micaAutoKsp)
   implementation(projects.micaAutoKsp)
+  implementation(depLibs.micaAuto)
 
   testImplementation(embeddedKotlin("test-junit5"))
 }

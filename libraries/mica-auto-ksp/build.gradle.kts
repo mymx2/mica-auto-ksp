@@ -5,8 +5,8 @@ plugins {
 
 dependencies {
   api(depLibs.autoService)
-  api(depLibs.micaAuto)
   implementation(depLibs.kotlinpoet)
+  implementation(depLibs.micaAuto)
   implementation(depLibs.symbolProcessingApi)
 
   testImplementation(embeddedKotlin("test-junit5"))
