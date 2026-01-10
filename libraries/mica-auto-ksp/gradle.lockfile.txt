@@ -7,9 +7,6 @@ runtimeClasspath - Runtime classpath of 'main'.
 |    |         +--- org.checkerframework:checker-qual:3.33.0
 |    |         \--- com.google.errorprone:error_prone_annotations:2.18.0
 |    \--- com.google.guava:guava:32.0.1-jre (*)
-+--- net.dreamlu:mica-auto:4.0.1
-|    +--- org.springframework.boot:spring-boot-configuration-processor:4.0.0 -> 4.0.1
-|    \--- org.springframework.boot:spring-boot-autoconfigure-processor:4.0.0 -> 4.0.1
 +--- org.jetbrains.kotlin:kotlin-stdlib:2.3.0
 |    \--- org.jetbrains:annotations:13.0
 +--- org.jetbrains.kotlin:kotlin-reflect:2.3.0
@@ -18,6 +15,9 @@ runtimeClasspath - Runtime classpath of 'main'.
 |    \--- com.squareup:kotlinpoet-jvm:2.2.0
 |         +--- org.jetbrains.kotlin:kotlin-stdlib:2.1.21 -> 2.3.0 (*)
 |         \--- org.jetbrains.kotlin:kotlin-reflect:2.1.21 -> 2.3.0 (*)
++--- net.dreamlu:mica-auto:4.0.1
+|    +--- org.springframework.boot:spring-boot-configuration-processor:4.0.0 -> 4.0.1
+|    \--- org.springframework.boot:spring-boot-autoconfigure-processor:4.0.0 -> 4.0.1
 +--- com.google.devtools.ksp:symbol-processing-api:2.3.4
 |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.2.10 -> 2.3.0 (*)
 +--- project :versions
@@ -27,8 +27,8 @@ runtimeClasspath - Runtime classpath of 'main'.
 |    \--- com.google.devtools.ksp:symbol-processing-api:2.3.4 (c)
 +--- org.jetbrains.kotlin:kotlin-metadata-jvm:2.3.0
 |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.3.0 (*)
-+--- com.google.auto.service:auto-service:{strictly 1.1.1} -> 1.1.1 (c)
 +--- net.dreamlu:mica-auto:{strictly 4.0.1} -> 4.0.1 (c)
++--- com.google.auto.service:auto-service:{strictly 1.1.1} -> 1.1.1 (c)
 +--- com.squareup:kotlinpoet:{strictly 2.2.0} -> 2.2.0 (c)
 +--- org.jetbrains.kotlin:kotlin-stdlib:{strictly 2.3.0} -> 2.3.0 (c)
 +--- org.jetbrains.kotlin:kotlin-reflect:{strictly 2.3.0} -> 2.3.0 (c)
@@ -37,10 +37,10 @@ runtimeClasspath - Runtime classpath of 'main'.
 +--- com.google.auto.service:auto-service-annotations:{strictly 1.1.1} -> 1.1.1 (c)
 +--- com.google.auto:auto-common:{strictly 1.2.1} -> 1.2.1 (c)
 +--- com.google.guava:guava:{strictly 32.0.1-jre} -> 32.0.1-jre (c)
-+--- org.springframework.boot:spring-boot-configuration-processor:{strictly 4.0.1} -> 4.0.1 (c)
-+--- org.springframework.boot:spring-boot-autoconfigure-processor:{strictly 4.0.1} -> 4.0.1 (c)
 +--- org.jetbrains:annotations:{strictly 13.0} -> 13.0 (c)
 +--- com.squareup:kotlinpoet-jvm:{strictly 2.2.0} -> 2.2.0 (c)
++--- org.springframework.boot:spring-boot-configuration-processor:{strictly 4.0.1} -> 4.0.1 (c)
++--- org.springframework.boot:spring-boot-autoconfigure-processor:{strictly 4.0.1} -> 4.0.1 (c)
 +--- com.google.guava:failureaccess:{strictly 1.0.1} -> 1.0.1 (c)
 +--- org.checkerframework:checker-qual:{strictly 3.33.0} -> 3.33.0 (c)
 \--- com.google.errorprone:error_prone_annotations:{strictly 2.18.0} -> 2.18.0 (c)
