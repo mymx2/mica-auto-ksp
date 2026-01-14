@@ -12,13 +12,12 @@ jdk = "25"
 node = "24.10.0"
 
 [libraries]
-# https://mvnrepository.com/artifact/org.projectlombok/lombok
-# https://repo1.maven.org/maven2/org/projectlombok/lombok/maven-metadata.xml
-# https://mirrors.cloud.tencent.com/nexus/repository/maven-public/org/projectlombok/lombok/maven-metadata.xml
-lombok = { module = "org.projectlombok:lombok", version = "1.18.42" }
+# https://mvnrepository.com/artifact/org.jspecify/jspecify
+# https://repo1.maven.org/maven2/org/jspecify/jspecify/maven-metadata.xml
+# https://mirrors.cloud.tencent.com/nexus/repository/maven-public/org/jspecify/jspecify/maven-metadata.xml
+jspecify = { module = "org.jspecify:jspecify", version = "1.0.0" }
 semver = { module = "net.swiftzer.semver:semver", version = "2.1.0" }
-slf4jApi = { module = "org.slf4j:slf4j-api", version = "2.1.0-alpha1" }
-slf4jSimple = { module = "org.slf4j:slf4j-simple", version = "2.1.0-alpha1" }
+slf4jBom = { module = "org.slf4j:slf4j-bom", version = "2.1.0-alpha1" }
 
 [bundles]
 
@@ -39,6 +38,7 @@ org-jetbrains-dokka = { id = "org.jetbrains.dokka", version = "2.1.0" }
 me-champeau-jmh = { id = "me.champeau.jmh", version = "0.7.3" }
 org-gradlex-jvm-dependency-conflict-resolution = { id = "org.gradlex.jvm-dependency-conflict-resolution", version = "2.5" }
 org-gradlex-java-module-dependencies = { id = "org.gradlex.java-module-dependencies", version = "1.11" }
+org-gradlex-java-module-testing = { id = "org.gradlex.java-module-testing", version = "1.8" }
 org-gradlex-extra-java-module-info = { id = "org.gradlex.extra-java-module-info", version = "1.13.1" }
 com-gradleup-shadow = { id = "com.gradleup.shadow", version = "9.3.0" }
 com-gradle-plugin-publish = { id = "com.gradle.plugin-publish", version = "2.0.0" }

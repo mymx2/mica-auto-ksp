@@ -1,3 +1,4 @@
+import io.github.mymx2.plugin.spring.SpringBootHelper.getSpringBootVersion
 import io.github.mymx2.plugin.spring.SpringBootHelper.springBootStarterWebMvc
 
 plugins {
@@ -5,7 +6,9 @@ plugins {
   id("io.github.mymx2.module.spring-boot")
 }
 
-springBootStarterWebMvc()
+val springBootVersion = getSpringBootVersion()
+
+springBootStarterWebMvc(springBootVersion)
 
 dependencies {
   ksp(projects.micaAutoKsp)
