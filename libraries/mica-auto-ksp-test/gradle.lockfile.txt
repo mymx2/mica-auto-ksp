@@ -3,11 +3,11 @@ runtimeClasspath - Runtime classpath of 'main'.
 |    \--- org.jetbrains:annotations:13.0
 +--- org.jetbrains.kotlin:kotlin-reflect:2.3.0
 |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.3.0 (*)
-+--- org.springframework.boot:spring-boot-starter-webmvc:4.0.1
-|    +--- org.springframework.boot:spring-boot-starter:4.0.1
-|    |    +--- org.springframework.boot:spring-boot-starter-logging:4.0.1
-|    |    |    +--- ch.qos.logback:logback-classic:1.5.22
-|    |    |    |    +--- ch.qos.logback:logback-core:1.5.22
++--- org.springframework.boot:spring-boot-starter-webmvc:4.1.0-M1
+|    +--- org.springframework.boot:spring-boot-starter:4.1.0-M1
+|    |    +--- org.springframework.boot:spring-boot-starter-logging:4.1.0-M1
+|    |    |    +--- ch.qos.logback:logback-classic:1.5.25
+|    |    |    |    +--- ch.qos.logback:logback-core:1.5.25
 |    |    |    |    \--- org.slf4j:slf4j-api:2.0.17 -> 2.1.0-alpha1
 |    |    |    |         \--- org.slf4j:slf4j-bom:2.1.0-alpha1
 |    |    |    |              +--- org.slf4j:jul-to-slf4j:2.1.0-alpha1 (c)
@@ -24,75 +24,75 @@ runtimeClasspath - Runtime classpath of 'main'.
 |    |    |    \--- org.slf4j:jul-to-slf4j:2.0.17 -> 2.1.0-alpha1
 |    |    |         +--- org.slf4j:slf4j-api:2.1.0-alpha1 (*)
 |    |    |         \--- org.slf4j:slf4j-bom:2.1.0-alpha1 (*)
-|    |    +--- org.springframework.boot:spring-boot-autoconfigure:4.0.1
-|    |    |    \--- org.springframework.boot:spring-boot:4.0.1
-|    |    |         +--- org.springframework:spring-core:7.0.2
+|    |    +--- org.springframework.boot:spring-boot-autoconfigure:4.1.0-M1
+|    |    |    \--- org.springframework.boot:spring-boot:4.1.0-M1
+|    |    |         +--- org.springframework:spring-core:7.0.3
 |    |    |         |    +--- commons-logging:commons-logging:1.3.5 -> org.slf4j:jcl-over-slf4j:2.1.0-alpha1
 |    |    |         |    |    +--- org.slf4j:slf4j-api:2.1.0-alpha1 (*)
 |    |    |         |    |    \--- org.slf4j:slf4j-bom:2.1.0-alpha1 (*)
 |    |    |         |    \--- org.jspecify:jspecify:1.0.0
-|    |    |         \--- org.springframework:spring-context:7.0.2
-|    |    |              +--- org.springframework:spring-aop:7.0.2
-|    |    |              |    +--- org.springframework:spring-beans:7.0.2
-|    |    |              |    |    \--- org.springframework:spring-core:7.0.2 (*)
-|    |    |              |    \--- org.springframework:spring-core:7.0.2 (*)
-|    |    |              +--- org.springframework:spring-beans:7.0.2 (*)
-|    |    |              +--- org.springframework:spring-core:7.0.2 (*)
-|    |    |              +--- org.springframework:spring-expression:7.0.2
-|    |    |              |    \--- org.springframework:spring-core:7.0.2 (*)
-|    |    |              \--- io.micrometer:micrometer-observation:1.16.1
+|    |    |         \--- org.springframework:spring-context:7.0.3
+|    |    |              +--- org.springframework:spring-aop:7.0.3
+|    |    |              |    +--- org.springframework:spring-beans:7.0.3
+|    |    |              |    |    \--- org.springframework:spring-core:7.0.3 (*)
+|    |    |              |    \--- org.springframework:spring-core:7.0.3 (*)
+|    |    |              +--- org.springframework:spring-beans:7.0.3 (*)
+|    |    |              +--- org.springframework:spring-core:7.0.3 (*)
+|    |    |              +--- org.springframework:spring-expression:7.0.3
+|    |    |              |    \--- org.springframework:spring-core:7.0.3 (*)
+|    |    |              \--- io.micrometer:micrometer-observation:1.16.2
 |    |    |                   +--- org.jspecify:jspecify:1.0.0
-|    |    |                   \--- io.micrometer:micrometer-commons:1.16.1
+|    |    |                   \--- io.micrometer:micrometer-commons:1.16.2
 |    |    |                        \--- org.jspecify:jspecify:1.0.0
 |    |    +--- jakarta.annotation:jakarta.annotation-api:3.0.0
 |    |    \--- org.yaml:snakeyaml:2.5
-|    +--- org.springframework.boot:spring-boot-starter-jackson:4.0.1
-|    |    +--- org.springframework.boot:spring-boot-starter:4.0.1 (*)
-|    |    \--- org.springframework.boot:spring-boot-jackson:4.0.1
-|    |         +--- org.springframework.boot:spring-boot:4.0.1 (*)
-|    |         \--- tools.jackson.core:jackson-databind:3.0.3
+|    +--- org.springframework.boot:spring-boot-starter-jackson:4.1.0-M1
+|    |    +--- org.springframework.boot:spring-boot-starter:4.1.0-M1 (*)
+|    |    \--- org.springframework.boot:spring-boot-jackson:4.1.0-M1
+|    |         +--- org.springframework.boot:spring-boot:4.1.0-M1 (*)
+|    |         \--- tools.jackson.core:jackson-databind:3.0.4
 |    |              +--- com.fasterxml.jackson.core:jackson-annotations:2.20
-|    |              +--- tools.jackson.core:jackson-core:3.0.3
-|    |              |    \--- tools.jackson:jackson-bom:3.0.3
+|    |              +--- tools.jackson.core:jackson-core:3.0.4
+|    |              |    \--- tools.jackson:jackson-bom:3.0.4
 |    |              |         +--- com.fasterxml.jackson.core:jackson-annotations:2.20 (c)
-|    |              |         +--- tools.jackson.core:jackson-core:3.0.3 (c)
-|    |              |         \--- tools.jackson.core:jackson-databind:3.0.3 (c)
-|    |              \--- tools.jackson:jackson-bom:3.0.3 (*)
-|    +--- org.springframework.boot:spring-boot-starter-tomcat:4.0.1
-|    |    +--- org.springframework.boot:spring-boot-starter:4.0.1 (*)
-|    |    +--- org.springframework.boot:spring-boot-starter-tomcat-runtime:4.0.1
-|    |    |    +--- org.springframework.boot:spring-boot-tomcat:4.0.1
-|    |    |    |    +--- org.springframework.boot:spring-boot-web-server:4.0.1
-|    |    |    |    |    +--- org.springframework.boot:spring-boot:4.0.1 (*)
-|    |    |    |    |    \--- org.springframework:spring-web:7.0.2
-|    |    |    |    |         +--- org.springframework:spring-beans:7.0.2 (*)
-|    |    |    |    |         +--- org.springframework:spring-core:7.0.2 (*)
-|    |    |    |    |         \--- io.micrometer:micrometer-observation:1.16.1 (*)
+|    |              |         +--- tools.jackson.core:jackson-core:3.0.4 (c)
+|    |              |         \--- tools.jackson.core:jackson-databind:3.0.4 (c)
+|    |              \--- tools.jackson:jackson-bom:3.0.4 (*)
+|    +--- org.springframework.boot:spring-boot-starter-tomcat:4.1.0-M1
+|    |    +--- org.springframework.boot:spring-boot-starter:4.1.0-M1 (*)
+|    |    +--- org.springframework.boot:spring-boot-starter-tomcat-runtime:4.1.0-M1
+|    |    |    +--- org.springframework.boot:spring-boot-tomcat:4.1.0-M1
+|    |    |    |    +--- org.springframework.boot:spring-boot-web-server:4.1.0-M1
+|    |    |    |    |    +--- org.springframework.boot:spring-boot:4.1.0-M1 (*)
+|    |    |    |    |    \--- org.springframework:spring-web:7.0.3
+|    |    |    |    |         +--- org.springframework:spring-beans:7.0.3 (*)
+|    |    |    |    |         +--- org.springframework:spring-core:7.0.3 (*)
+|    |    |    |    |         \--- io.micrometer:micrometer-observation:1.16.2 (*)
 |    |    |    |    +--- org.apache.tomcat.embed:tomcat-embed-core:11.0.15
 |    |    |    |    \--- jakarta.annotation:jakarta.annotation-api:3.0.0
-|    |    |    +--- org.springframework.boot:spring-boot-web-server:4.0.1 (*)
+|    |    |    +--- org.springframework.boot:spring-boot-web-server:4.1.0-M1 (*)
 |    |    |    +--- jakarta.annotation:jakarta.annotation-api:3.0.0
 |    |    |    +--- org.apache.tomcat.embed:tomcat-embed-core:11.0.15
 |    |    |    +--- org.apache.tomcat.embed:tomcat-embed-el:11.0.15
 |    |    |    \--- org.apache.tomcat.embed:tomcat-embed-websocket:11.0.15
 |    |    |         \--- org.apache.tomcat.embed:tomcat-embed-core:11.0.15
-|    |    \--- org.springframework.boot:spring-boot-tomcat:4.0.1 (*)
-|    +--- org.springframework.boot:spring-boot-http-converter:4.0.1
-|    |    +--- org.springframework.boot:spring-boot:4.0.1 (*)
-|    |    \--- org.springframework:spring-web:7.0.2 (*)
-|    \--- org.springframework.boot:spring-boot-webmvc:4.0.1
-|         +--- org.springframework.boot:spring-boot-http-converter:4.0.1 (*)
-|         +--- org.springframework.boot:spring-boot-servlet:4.0.1
-|         |    +--- org.springframework.boot:spring-boot:4.0.1 (*)
-|         |    \--- org.springframework:spring-web:7.0.2 (*)
-|         +--- org.springframework:spring-web:7.0.2 (*)
-|         \--- org.springframework:spring-webmvc:7.0.2
-|              +--- org.springframework:spring-aop:7.0.2 (*)
-|              +--- org.springframework:spring-beans:7.0.2 (*)
-|              +--- org.springframework:spring-context:7.0.2 (*)
-|              +--- org.springframework:spring-core:7.0.2 (*)
-|              +--- org.springframework:spring-expression:7.0.2 (*)
-|              \--- org.springframework:spring-web:7.0.2 (*)
+|    |    \--- org.springframework.boot:spring-boot-tomcat:4.1.0-M1 (*)
+|    +--- org.springframework.boot:spring-boot-http-converter:4.1.0-M1
+|    |    +--- org.springframework.boot:spring-boot:4.1.0-M1 (*)
+|    |    \--- org.springframework:spring-web:7.0.3 (*)
+|    \--- org.springframework.boot:spring-boot-webmvc:4.1.0-M1
+|         +--- org.springframework.boot:spring-boot-http-converter:4.1.0-M1 (*)
+|         +--- org.springframework.boot:spring-boot-servlet:4.1.0-M1
+|         |    +--- org.springframework.boot:spring-boot:4.1.0-M1 (*)
+|         |    \--- org.springframework:spring-web:7.0.3 (*)
+|         +--- org.springframework:spring-web:7.0.3 (*)
+|         \--- org.springframework:spring-webmvc:7.0.3
+|              +--- org.springframework:spring-aop:7.0.3 (*)
+|              +--- org.springframework:spring-beans:7.0.3 (*)
+|              +--- org.springframework:spring-context:7.0.3 (*)
+|              +--- org.springframework:spring-core:7.0.3 (*)
+|              +--- org.springframework:spring-expression:7.0.3 (*)
+|              \--- org.springframework:spring-web:7.0.3 (*)
 +--- project :mica-auto-ksp
 |    +--- com.google.auto.service:auto-service:1.1.1
 |    |    +--- com.google.auto.service:auto-service-annotations:1.1.1
@@ -128,61 +128,61 @@ runtimeClasspath - Runtime classpath of 'main'.
 +--- net.dreamlu:mica-auto:{strictly 4.0.1} -> 4.0.1 (c)
 +--- org.jetbrains.kotlin:kotlin-stdlib:{strictly 2.3.0} -> 2.3.0 (c)
 +--- org.jetbrains.kotlin:kotlin-reflect:{strictly 2.3.0} -> 2.3.0 (c)
-+--- org.springframework.boot:spring-boot-starter-webmvc:{strictly 4.0.1} -> 4.0.1 (c)
++--- org.springframework.boot:spring-boot-starter-webmvc:{strictly 4.1.0-M1} -> 4.1.0-M1 (c)
 +--- org.jetbrains.kotlin:kotlin-metadata-jvm:{strictly 2.3.0} -> 2.3.0 (c)
 +--- org.jetbrains:annotations:{strictly 13.0} -> 13.0 (c)
-+--- org.springframework.boot:spring-boot-starter:{strictly 4.0.1} -> 4.0.1 (c)
-+--- org.springframework.boot:spring-boot-starter-jackson:{strictly 4.0.1} -> 4.0.1 (c)
-+--- org.springframework.boot:spring-boot-starter-tomcat:{strictly 4.0.1} -> 4.0.1 (c)
-+--- org.springframework.boot:spring-boot-http-converter:{strictly 4.0.1} -> 4.0.1 (c)
-+--- org.springframework.boot:spring-boot-webmvc:{strictly 4.0.1} -> 4.0.1 (c)
++--- org.springframework.boot:spring-boot-starter:{strictly 4.1.0-M1} -> 4.1.0-M1 (c)
++--- org.springframework.boot:spring-boot-starter-jackson:{strictly 4.1.0-M1} -> 4.1.0-M1 (c)
++--- org.springframework.boot:spring-boot-starter-tomcat:{strictly 4.1.0-M1} -> 4.1.0-M1 (c)
++--- org.springframework.boot:spring-boot-http-converter:{strictly 4.1.0-M1} -> 4.1.0-M1 (c)
++--- org.springframework.boot:spring-boot-webmvc:{strictly 4.1.0-M1} -> 4.1.0-M1 (c)
 +--- com.google.auto.service:auto-service:{strictly 1.1.1} -> 1.1.1 (c)
 +--- com.squareup:kotlinpoet:{strictly 2.2.0} -> 2.2.0 (c)
 +--- com.google.devtools.ksp:symbol-processing-api:{strictly 2.3.4} -> 2.3.4 (c)
 +--- org.springframework.boot:spring-boot-configuration-processor:{strictly 4.0.0} -> 4.0.0 (c)
 +--- org.springframework.boot:spring-boot-autoconfigure-processor:{strictly 4.0.0} -> 4.0.0 (c)
 +--- org.slf4j:slf4j-bom:{strictly 2.1.0-alpha1} -> 2.1.0-alpha1 (c)
-+--- org.springframework.boot:spring-boot-starter-logging:{strictly 4.0.1} -> 4.0.1 (c)
-+--- org.springframework.boot:spring-boot-autoconfigure:{strictly 4.0.1} -> 4.0.1 (c)
++--- org.springframework.boot:spring-boot-starter-logging:{strictly 4.1.0-M1} -> 4.1.0-M1 (c)
++--- org.springframework.boot:spring-boot-autoconfigure:{strictly 4.1.0-M1} -> 4.1.0-M1 (c)
 +--- jakarta.annotation:jakarta.annotation-api:{strictly 3.0.0} -> 3.0.0 (c)
 +--- org.yaml:snakeyaml:{strictly 2.5} -> 2.5 (c)
-+--- org.springframework.boot:spring-boot-jackson:{strictly 4.0.1} -> 4.0.1 (c)
-+--- org.springframework.boot:spring-boot-starter-tomcat-runtime:{strictly 4.0.1} -> 4.0.1 (c)
-+--- org.springframework.boot:spring-boot-tomcat:{strictly 4.0.1} -> 4.0.1 (c)
-+--- org.springframework.boot:spring-boot:{strictly 4.0.1} -> 4.0.1 (c)
-+--- org.springframework:spring-web:{strictly 7.0.2} -> 7.0.2 (c)
-+--- org.springframework.boot:spring-boot-servlet:{strictly 4.0.1} -> 4.0.1 (c)
-+--- org.springframework:spring-webmvc:{strictly 7.0.2} -> 7.0.2 (c)
++--- org.springframework.boot:spring-boot-jackson:{strictly 4.1.0-M1} -> 4.1.0-M1 (c)
++--- org.springframework.boot:spring-boot-starter-tomcat-runtime:{strictly 4.1.0-M1} -> 4.1.0-M1 (c)
++--- org.springframework.boot:spring-boot-tomcat:{strictly 4.1.0-M1} -> 4.1.0-M1 (c)
++--- org.springframework.boot:spring-boot:{strictly 4.1.0-M1} -> 4.1.0-M1 (c)
++--- org.springframework:spring-web:{strictly 7.0.3} -> 7.0.3 (c)
++--- org.springframework.boot:spring-boot-servlet:{strictly 4.1.0-M1} -> 4.1.0-M1 (c)
++--- org.springframework:spring-webmvc:{strictly 7.0.3} -> 7.0.3 (c)
 +--- com.google.auto.service:auto-service-annotations:{strictly 1.1.1} -> 1.1.1 (c)
 +--- com.google.auto:auto-common:{strictly 1.2.1} -> 1.2.1 (c)
 +--- com.google.guava:guava:{strictly 32.0.1-jre} -> 32.0.1-jre (c)
 +--- com.squareup:kotlinpoet-jvm:{strictly 2.2.0} -> 2.2.0 (c)
-+--- ch.qos.logback:logback-classic:{strictly 1.5.22} -> 1.5.22 (c)
++--- ch.qos.logback:logback-classic:{strictly 1.5.25} -> 1.5.25 (c)
 +--- org.apache.logging.log4j:log4j-to-slf4j:{strictly 2.25.3} -> 2.25.3 (c)
 +--- org.slf4j:jul-to-slf4j:{strictly 2.1.0-alpha1} -> 2.1.0-alpha1 (c)
-+--- tools.jackson.core:jackson-databind:{strictly 3.0.3} -> 3.0.3 (c)
-+--- org.springframework.boot:spring-boot-web-server:{strictly 4.0.1} -> 4.0.1 (c)
++--- tools.jackson.core:jackson-databind:{strictly 3.0.4} -> 3.0.4 (c)
++--- org.springframework.boot:spring-boot-web-server:{strictly 4.1.0-M1} -> 4.1.0-M1 (c)
 +--- org.apache.tomcat.embed:tomcat-embed-core:{strictly 11.0.15} -> 11.0.15 (c)
 +--- org.apache.tomcat.embed:tomcat-embed-el:{strictly 11.0.15} -> 11.0.15 (c)
 +--- org.apache.tomcat.embed:tomcat-embed-websocket:{strictly 11.0.15} -> 11.0.15 (c)
-+--- org.springframework:spring-core:{strictly 7.0.2} -> 7.0.2 (c)
-+--- org.springframework:spring-context:{strictly 7.0.2} -> 7.0.2 (c)
-+--- org.springframework:spring-beans:{strictly 7.0.2} -> 7.0.2 (c)
-+--- io.micrometer:micrometer-observation:{strictly 1.16.1} -> 1.16.1 (c)
-+--- org.springframework:spring-aop:{strictly 7.0.2} -> 7.0.2 (c)
-+--- org.springframework:spring-expression:{strictly 7.0.2} -> 7.0.2 (c)
++--- org.springframework:spring-core:{strictly 7.0.3} -> 7.0.3 (c)
++--- org.springframework:spring-context:{strictly 7.0.3} -> 7.0.3 (c)
++--- org.springframework:spring-beans:{strictly 7.0.3} -> 7.0.3 (c)
++--- io.micrometer:micrometer-observation:{strictly 1.16.2} -> 1.16.2 (c)
++--- org.springframework:spring-aop:{strictly 7.0.3} -> 7.0.3 (c)
++--- org.springframework:spring-expression:{strictly 7.0.3} -> 7.0.3 (c)
 +--- com.google.guava:failureaccess:{strictly 1.0.1} -> 1.0.1 (c)
 +--- com.google.code.findbugs:jsr305:{strictly 3.0.2} -> 3.0.2 (c)
 +--- org.checkerframework:checker-qual:{strictly 3.33.0} -> 3.33.0 (c)
 +--- com.google.errorprone:error_prone_annotations:{strictly 2.18.0} -> 2.18.0 (c)
 +--- com.google.j2objc:j2objc-annotations:{strictly 2.8} -> 2.8 (c)
 +--- org.slf4j:slf4j-api:{strictly 2.1.0-alpha1} -> 2.1.0-alpha1 (c)
-+--- ch.qos.logback:logback-core:{strictly 1.5.22} -> 1.5.22 (c)
++--- ch.qos.logback:logback-core:{strictly 1.5.25} -> 1.5.25 (c)
 +--- org.apache.logging.log4j:log4j-api:{strictly 2.25.3} -> 2.25.3 (c)
 +--- com.fasterxml.jackson.core:jackson-annotations:{strictly 2.20} -> 2.20 (c)
-+--- tools.jackson.core:jackson-core:{strictly 3.0.3} -> 3.0.3 (c)
-+--- tools.jackson:jackson-bom:{strictly 3.0.3} -> 3.0.3 (c)
++--- tools.jackson.core:jackson-core:{strictly 3.0.4} -> 3.0.4 (c)
++--- tools.jackson:jackson-bom:{strictly 3.0.4} -> 3.0.4 (c)
 +--- org.slf4j:jcl-over-slf4j:{strictly 2.1.0-alpha1} -> 2.1.0-alpha1 (c)
 +--- org.jspecify:jspecify:{strictly 1.0.0} -> 1.0.0 (c)
-+--- io.micrometer:micrometer-commons:{strictly 1.16.1} -> 1.16.1 (c)
++--- io.micrometer:micrometer-commons:{strictly 1.16.2} -> 1.16.2 (c)
 \--- org.apache.logging.log4j:log4j-bom:{strictly 2.25.3} -> 2.25.3 (c)
