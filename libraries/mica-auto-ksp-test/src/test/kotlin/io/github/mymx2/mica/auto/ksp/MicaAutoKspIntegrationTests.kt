@@ -52,8 +52,9 @@ class MicaAutoKspIntegrationTests(private val context: ApplicationContext) {
 
     assertThat(services).isNotEmpty
 
-    val impl =
-      services.firstOrNull { it.javaClass.simpleName == HelloServiceImpl::class.simpleName }
+    val impl = services.firstOrNull {
+      it.javaClass.simpleName == HelloServiceImpl::class.simpleName
+    }
     assertThat(impl).isNotNull
     assertThat(impl!!.hello()).isEqualTo("OK")
   }

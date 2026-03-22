@@ -1,15 +1,34 @@
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
-name: Close issue
-run-name: Auto close inactive issues with schedule
+name: PR Checks Docs
 
 on:
-  schedule:
-    - cron: "0 0 */7 * *"
+  push:
+    branches:
+      - "**"
+    tags:
+      - "!**"
+    paths:
+      - "docs/**"
+  pull_request:
+    branches:
+      - main
+      - minor
+      - fix/**
+      - feat/**
+      - patch/**
+    paths:
+      - "docs/**"
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref || github.run_id }}
+  cancel-in-progress: true
+
+env:
+  APP_DIR: docs
 
 jobs:
-  close-issues:
-    permissions:
-      issues: write
+  pr-checks-docs:
     runs-on: ubuntu-latest
 
     steps:
@@ -18,16 +37,19 @@ jobs:
           CONTEXT_GITHUB: ${{ toJSON(github) }}
         run: echo "$CONTEXT_GITHUB"
 
-      - name: 😞 check the labels and auto close it
-        uses: actions-cool/issues-helper@71b62d7da76e59ff7b193904feb6e77d4dbb2777 # v3.7.6
+      - name: ✈ Checkout repository
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
-          actions: "close-issues"
-          token: ${{ secrets.GITHUB_TOKEN }}
-          labels: "status|waiting-reproduction,status|waiting-feedback"
-          inactive-day: 7
-          body: |
-            Hi, this issue has been closed because it has been inactive for more than 7 days.
-            If you think it should still be open, please reply here.
+          fetch-depth: 0
+
+      - name: 📦 Setup Vite+
+        uses: voidzero-dev/setup-vp@fd19e0626188613eec92a77e875180c6445b56ba # v1
+
+      - name: 🏗 Run main checks
+        working-directory: docs
+        run: |
+          vp i
+          vp check
 
       - name: ⏸ Pause for VSCode Debug
         env:
