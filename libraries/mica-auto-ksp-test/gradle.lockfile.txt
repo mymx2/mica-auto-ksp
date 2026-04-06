@@ -52,7 +52,12 @@ runtimeClasspath - Runtime classpath of 'main'.
 |    |         +--- org.springframework.boot:spring-boot:4.1.0-M3 (*)
 |    |         \--- tools.jackson.core:jackson-databind:3.1.0
 |    |              +--- com.fasterxml.jackson.core:jackson-annotations:2.21
-|    |              \--- tools.jackson.core:jackson-core:3.1.0
+|    |              +--- tools.jackson.core:jackson-core:3.1.0
+|    |              |    \--- tools.jackson:jackson-bom:3.1.0
+|    |              |         +--- com.fasterxml.jackson.core:jackson-annotations:2.21 (c)
+|    |              |         +--- tools.jackson.core:jackson-core:3.1.0 (c)
+|    |              |         \--- tools.jackson.core:jackson-databind:3.1.0 (c)
+|    |              \--- tools.jackson:jackson-bom:3.1.0 (*)
 |    +--- org.springframework.boot:spring-boot-starter-tomcat:4.1.0-M3
 |    |    +--- org.springframework.boot:spring-boot-starter:4.1.0-M3 (*)
 |    |    +--- org.springframework.boot:spring-boot-starter-tomcat-runtime:4.1.0-M3
@@ -176,6 +181,7 @@ runtimeClasspath - Runtime classpath of 'main'.
 +--- org.apache.logging.log4j:log4j-api:{strictly 2.25.3} -> 2.25.3 (c)
 +--- com.fasterxml.jackson.core:jackson-annotations:{strictly 2.21} -> 2.21 (c)
 +--- tools.jackson.core:jackson-core:{strictly 3.1.0} -> 3.1.0 (c)
++--- tools.jackson:jackson-bom:{strictly 3.1.0} -> 3.1.0 (c)
 +--- org.slf4j:jcl-over-slf4j:{strictly 2.1.0-alpha1} -> 2.1.0-alpha1 (c)
 +--- org.jspecify:jspecify:{strictly 1.0.0} -> 1.0.0 (c)
 +--- io.micrometer:micrometer-commons:{strictly 1.16.4} -> 1.16.4 (c)
