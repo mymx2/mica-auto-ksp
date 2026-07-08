@@ -10,7 +10,6 @@ import {
   mkdirSync,
   readdirSync,
   readFileSync,
-  rmSync,
   statSync,
   writeFileSync,
 } from "node:fs";
@@ -67,7 +66,7 @@ const REPLACE_REPO_FILES = [
 const SYSTEM_DIRS = [".git", ".worktrees", ".gradle", "build", ".kotlin", "node_modules"];
 
 // ── 同步统计计数器 ────────────────────────────────────────────────────────────
-const stats = { synced: 0, skipped: 0, keepLocal: 0, deleted: 0 };
+const stats = { synced: 0, skipped: 0, keepLocal: 0 };
 
 // ── 辅助函数 ────────────────────────────────────────────────────────────────
 
@@ -111,32 +110,9 @@ function isInSkipPath(relPath: string): boolean {
 }
 
 /**
- * 判断两个文件集合是否完全相同（即上游没有变化）
- */
-function setsEqual(a: Set<string>, b: Set<string>): boolean {
-  if (a.size !== b.size) return false;
-  for (const item of a) {
-    if (!b.has(item)) return false;
-  }
-  return true;
-}
-
-/**
- * 获取上游 worktree 的所有已追踪文件路径（相对于 worktree 根目录）
- */
-function getUpstreamFiles(): Set<string> {
-  const output = execSync("git ls-tree -r --name-only HEAD", {
-    cwd: WORKTREE_DIR,
-    encoding: "utf-8",
-  });
-  return new Set(output.trim().split("\n").map((s) => s.trim()).filter(Boolean));
-}
-
-/**
  * 递归同步目录：从上游（src）复制到本地（dest）
  * - 跳过系统目录和本项目不需要的目录
  * - 覆盖本地已有文件（保留本地版本的文件除外）
- * - 不执行任何删除操作（删除由 cleanupDeletedFiles 统一处理）
  */
 function syncDir(src: string, dest: string): void {
   if (!existsSync(src)) {
@@ -175,57 +151,6 @@ function syncDir(src: string, dest: string): void {
 }
 
 /**
- * 根据上游 git 历史精确清理本地文件：
- * 只删除「上游曾有（beforePull）但上游已移除（afterPull）」的文件。
- * 本地独有的文件/目录从未出现在上游 git 历史中，因此永远不会被删除。
- */
-function cleanupDeletedFiles(beforePull: Set<string>, afterPull: Set<string>): void {
-  for (const filePath of beforePull) {
-    // 上游仍然有的文件不删
-    if (afterPull.has(filePath)) continue;
-
-    // 跳过路径不处理
-    if (isInSkipPath(filePath)) continue;
-
-    // 保留本地文件不删
-    if (isKeepLocal(filePath)) continue;
-
-    const localPath = join(PROJECT_ROOT, filePath);
-    if (existsSync(localPath)) {
-      rmSync(localPath, { force: true });
-      stats.deleted++;
-      console.log(`  [deleted] ${filePath}`);
-    }
-  }
-
-  // 清理删除文件后可能产生的空目录（自底向上）
-  cleanEmptyDirs(PROJECT_ROOT);
-}
-
-/**
- * 递归清理空目录（不删除系统目录和含文件的目录）
- */
-function cleanEmptyDirs(dir: string): void {
-  if (!existsSync(dir)) return;
-  const entries = readdirSync(dir);
-  for (const entry of entries) {
-    if (SYSTEM_DIRS.includes(entry)) continue;
-    const fullPath = join(dir, entry);
-    if (!existsSync(fullPath) || !statSync(fullPath).isDirectory()) continue;
-    // 先递归子目录
-    cleanEmptyDirs(fullPath);
-    // 子目录清理后再检查当前目录是否为空
-    if (readdirSync(fullPath).length === 0) {
-      const relPath = normalize(relative(PROJECT_ROOT, fullPath));
-      if (!isInSkipPath(relPath)) {
-        rmSync(fullPath, { recursive: true, force: true });
-        console.log(`  [empty-dir] ${relPath}`);
-      }
-    }
-  }
-}
-
-/**
  * 替换文件中的仓库引用：上游仓库 → 当前仓库
  */
 function replaceRepoRefs(filePath: string): void {
@@ -249,12 +174,8 @@ function replaceRepoRefs(filePath: string): void {
 
 console.log("\n📦 Step 1: Clone / update upstream repo");
 
-// 在 pull 前记录上游文件快照（用于后续精确计算删除集）
-let upstreamBefore: Set<string> = new Set();
-
 if (existsSync(join(WORKTREE_DIR, ".git"))) {
   console.log("  Upstream already cloned, pulling latest...");
-  upstreamBefore = getUpstreamFiles();
   try {
     run("git pull --ff-only", WORKTREE_DIR);
   } catch {
@@ -268,42 +189,15 @@ if (existsSync(join(WORKTREE_DIR, ".git"))) {
   run(`git clone --branch main https://github.com/${UPSTREAM_REPO}.git ${WORKTREE_DIR}`);
 }
 
-const upstreamAfter = getUpstreamFiles();
-
-// ── 快速退出：上游无变化时跳过同步 ─────────────────────────────────────────
-
-if (upstreamBefore.size > 0 && setsEqual(upstreamBefore, upstreamAfter)) {
-  console.log("\n⏩ No upstream changes detected, skipping sync.");
-  console.log("✅ Already up to date!");
-  process.exit(0);
-}
-
-// ── 快速退出：上游无变化时跳过同步 ─────────────────────────────────────────
-
-if (upstreamBefore.size > 0 && setsEqual(upstreamBefore, upstreamAfter)) {
-  console.log("\n⏩ No upstream changes detected, skipping sync.");
-  console.log("✅ Already up to date!");
-  process.exit(0);
-}
-
 // ── Step 2: Sync all files from upstream ──────────────────────────────────
 
 console.log("\n🔄 Step 2: Sync project files from upstream");
 
 syncDir(WORKTREE_DIR, PROJECT_ROOT);
 
-// ── Step 3: Cleanup files removed by upstream ──────────────────────────────
+// ── Step 3: Replace repo references in synced files ─────────────────────────
 
-if (upstreamBefore.size > 0) {
-  console.log("\n🧹 Step 3: Cleanup upstream-deleted files");
-  cleanupDeletedFiles(upstreamBefore, upstreamAfter);
-} else {
-  console.log("\n🧹 Step 3: Skipped (first clone, no prior state)");
-}
-
-// ── Step 4: Replace repo references in synced files ─────────────────────────
-
-console.log("\n✏️  Step 4: Replace repo references");
+console.log("\n✏️  Step 3: Replace repo references");
 
 for (const relPath of REPLACE_REPO_FILES) {
   const filePath = join(PROJECT_ROOT, relPath);
@@ -311,6 +205,6 @@ for (const relPath of REPLACE_REPO_FILES) {
 }
 
 console.log("  [ok] All repo references replaced in synced files");
-console.log(`  synced: ${stats.synced}, skipped: ${stats.skipped}, keep-local: ${stats.keepLocal}, deleted: ${stats.deleted}`);
+console.log(`  synced: ${stats.synced}, skipped: ${stats.skipped}, keep-local: ${stats.keepLocal}`);
 
 console.log("\n✅ Sync complete!");
