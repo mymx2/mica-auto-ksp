@@ -39,6 +39,8 @@ const SKIP_DIRS = [
   "docs",                // 上游文档站点
   "examples",            // 上游示例代码
   "gradle/build-logic",  // 上游构建逻辑
+  "gradle/aggregation",
+  "gradle/versions",
 ];
 
 // ─ 保留本地版本的文件（改动太大，不覆盖） ───────────────────────────────────
