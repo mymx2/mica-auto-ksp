@@ -9,25 +9,25 @@ runtimeClasspath - Runtime classpath of 'main'.
 |    |         +--- com.google.errorprone:error_prone_annotations:2.18.0
 |    |         \--- com.google.j2objc:j2objc-annotations:2.8
 |    \--- com.google.guava:guava:32.0.1-jre (*)
-+--- org.jetbrains.kotlin:kotlin-stdlib:2.3.21
++--- org.jetbrains.kotlin:kotlin-stdlib:2.4.0
 |    \--- org.jetbrains:annotations:13.0
-+--- org.jetbrains.kotlin:kotlin-reflect:2.3.21
-|    \--- org.jetbrains.kotlin:kotlin-stdlib:2.3.21 (*)
++--- org.jetbrains.kotlin:kotlin-reflect:2.4.0
+|    \--- org.jetbrains.kotlin:kotlin-stdlib:2.4.0 (*)
 +--- com.squareup:kotlinpoet:2.3.0
 |    \--- com.squareup:kotlinpoet-jvm:2.3.0
-|         +--- org.jetbrains.kotlin:kotlin-stdlib:2.3.20 -> 2.3.21 (*)
-|         \--- org.jetbrains.kotlin:kotlin-reflect:2.3.20 -> 2.3.21 (*)
+|         +--- org.jetbrains.kotlin:kotlin-stdlib:2.3.20 -> 2.4.0 (*)
+|         \--- org.jetbrains.kotlin:kotlin-reflect:2.3.20 -> 2.4.0 (*)
 +--- net.dreamlu:mica-auto:4.0.1
 |    +--- org.springframework.boot:spring-boot-configuration-processor:4.0.0
 |    \--- org.springframework.boot:spring-boot-autoconfigure-processor:4.0.0
 +--- com.google.devtools.ksp:symbol-processing-api:2.3.9
-|    \--- org.jetbrains.kotlin:kotlin-stdlib:2.3.20 -> 2.3.21 (*)
+|    \--- org.jetbrains.kotlin:kotlin-stdlib:2.3.20 -> 2.4.0 (*)
 +--- project ':versions'
 |    +--- org.slf4j:slf4j-bom:2.1.0-alpha1
 |    +--- com.google.auto.service:auto-service:1.1.1 (c)
 |    +--- com.squareup:kotlinpoet:2.3.0 (c)
 |    +--- net.dreamlu:mica-auto:4.0.1 (c)
 |    \--- com.google.devtools.ksp:symbol-processing-api:2.3.9 (c)
-+--- org.jetbrains.kotlin:kotlin-metadata-jvm:2.3.21
-|    \--- org.jetbrains.kotlin:kotlin-stdlib:2.3.21 (*)
++--- org.jetbrains.kotlin:kotlin-metadata-jvm:2.4.0
+|    \--- org.jetbrains.kotlin:kotlin-stdlib:2.4.0 (*)
 \--- org.slf4j:slf4j-bom:{strictly 2.1.0-alpha1} -> 2.1.0-alpha1 (c)
