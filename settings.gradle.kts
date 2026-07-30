@@ -15,3 +15,16 @@ dyIncludeProjects(
     ":mica-auto-ksp-test" to "libraries/mica-auto-ksp-test",
   )
 )
+
+gradle.lifecycle.afterProject {
+  // Task aliases: fmt → qualityGate, lint → qualityCheck, dev → bootRun
+  mapOf("fmt" to "qualityGate", "lint" to "qualityCheck", "dev" to "bootRun").forEach {
+    (alias, target) ->
+    if (tasks.names.contains(target) && !tasks.names.contains(alias)) {
+      tasks.register(alias) {
+        group = "alias"
+        dependsOn(target)
+      }
+    }
+  }
+}
