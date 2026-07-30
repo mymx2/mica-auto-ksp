@@ -6,12 +6,14 @@ on:
   schedule:
     - cron: "15 4 * * 1"
 
+permissions:
+  contents: write
+  pull-requests: write
+  workflows: write
+
 jobs:
   sync-upstream:
     if: github.repository == 'mymx2/mica-auto-ksp'
-    permissions:
-      contents: write
-      pull-requests: write
     runs-on: ubuntu-latest
 
     steps:
