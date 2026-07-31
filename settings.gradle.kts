@@ -3,9 +3,9 @@
 import io.github.mymx2.plugin.dyIncludeProjects
 
 plugins {
-  id("io.github.mymx2.build") version "1.5.4"
-  id("io.github.mymx2.build.feature.catalogs") version "1.5.4"
-  id("io.github.mymx2.plugin.dy.example.settings") version "1.5.4"
+  id("io.github.mymx2.build") version "1.5.5"
+  id("io.github.mymx2.build.feature.catalogs") version "1.5.5"
+  id("io.github.mymx2.plugin.dy.example.settings") version "1.5.5"
   id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 
