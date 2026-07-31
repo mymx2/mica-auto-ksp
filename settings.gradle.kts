@@ -19,6 +19,13 @@ dyIncludeProjects(
 )
 
 gradle.lifecycle.afterProject {
+  if (listOf("writeLocks", "unzipSourceJars").all { tasks.names.contains(it) }) {
+    tasks.register("i") {
+      description = "Install: writeLocks + unzipSourceJars"
+      group = "alias"
+      dependsOn(tasks.named("writeLocks"), tasks.named("unzipSourceJars"))
+    }
+  }
   mapOf("fmt" to "qualityGate", "lint" to "qualityCheck", "dev" to "bootRun").forEach {
     (alias, target) ->
     if (tasks.names.contains(target) && !tasks.names.contains(alias)) {
