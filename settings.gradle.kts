@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 import io.github.mymx2.plugin.dyIncludeProjects
 
 plugins {
@@ -17,11 +19,11 @@ dyIncludeProjects(
 )
 
 gradle.lifecycle.afterProject {
-  // Task aliases: fmt → qualityGate, lint → qualityCheck, dev → bootRun
   mapOf("fmt" to "qualityGate", "lint" to "qualityCheck", "dev" to "bootRun").forEach {
     (alias, target) ->
     if (tasks.names.contains(target) && !tasks.names.contains(alias)) {
       tasks.register(alias) {
+        description = "Task aliases: fmt → qualityGate, lint → qualityCheck, dev → bootRun"
         group = "alias"
         dependsOn(target)
       }
