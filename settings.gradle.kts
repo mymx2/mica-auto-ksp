@@ -1,6 +1,7 @@
 @file:Suppress("UnstableApiUsage")
 
 import io.github.mymx2.plugin.dyIncludeProjects
+import io.github.mymx2.plugin.resetTaskGroup
 
 plugins {
   id("io.github.mymx2.build") version "1.5.5"
@@ -36,4 +37,11 @@ gradle.lifecycle.afterProject {
       }
     }
   }
+  listOf(
+      "i" to "alias",
+      "fmt" to "alias",
+      "lint" to "alias",
+      "dev" to "alias",
+    )
+    .forEach { resetTaskGroup(it.first, it.second) }
 }
